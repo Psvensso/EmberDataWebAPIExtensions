@@ -1,0 +1,58 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+@Scripts.Render("~/bundles/ember")
+@Scripts.Render("~/bundles/app")
+<script src="/Embermodels"></script>
+    <script type="text/x-handlebars" id="index">
+        
+        <table>
+            <thead>
+                <tr>
+                    <td>
+                        Id
+                    </td>
+                    <td>
+                        Title
+                    </td>
+                    <td>
+                        Body
+                    </td>
+                    <td>
+                        Posted at
+                    </td>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each item in model}}
+
+                <tr>
+                    <td>
+                        {{item.id}}
+                    </td>
+                    <td>
+                        {{item.title}}
+                    </td>
+                    <td>
+                        {{item.body}}
+                    </td>
+                    <td>
+                        {{item.posted_at}}
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+
+        </table>
+    </script>
+    <script type="text/x-handlebars">
+        <h2>Welcome to Ember.js</h2>
+        {{outlet}}
+
+    </script>
+    <div class="jumbotron" id="ember-app">
+        <h1>Ember</h1>
+        <h2>List of items</h2>
+
+    </div>
+
