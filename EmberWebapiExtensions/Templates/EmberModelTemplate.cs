@@ -7,7 +7,7 @@
 //     the code is regenerated.
 // </auto-generated>
 // ------------------------------------------------------------------------------
-namespace EmberWebapiExtensions
+namespace EmberWebapiExtensions.Templates
 {
     using System.Linq;
     using System.Text;
@@ -18,7 +18,7 @@ namespace EmberWebapiExtensions
     /// Class to produce the template output
     /// </summary>
     
-    #line 1 "F:\projects\EmberDataWebAPI\EmberWebapiExtensions\EmberModelTemplate.tt"
+    #line 1 "F:\projects\EmberDataWebAPI\EmberWebapiExtensions\Templates\EmberModelTemplate.tt"
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "12.0.0.0")]
     public partial class EmberModelTemplate : EmberModelTemplateBase
     {
@@ -28,7 +28,96 @@ namespace EmberWebapiExtensions
         /// </summary>
         public virtual string TransformText()
         {
-            this.Write("(function(App) {\r\n\t\r\n\r\n\t\r\n}(App));");
+            this.Write("(function(");
+            
+            #line 6 "F:\projects\EmberDataWebAPI\EmberWebapiExtensions\Templates\EmberModelTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(appNamespace));
+            
+            #line default
+            #line hidden
+            this.Write(") {\r\n");
+            
+            #line 7 "F:\projects\EmberDataWebAPI\EmberWebapiExtensions\Templates\EmberModelTemplate.tt"
+ foreach(var emberClass in model.Classes) { 
+            
+            #line default
+            #line hidden
+            
+            #line 8 "F:\projects\EmberDataWebAPI\EmberWebapiExtensions\Templates\EmberModelTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(appNamespace));
+            
+            #line default
+            #line hidden
+            this.Write(".");
+            
+            #line 8 "F:\projects\EmberDataWebAPI\EmberWebapiExtensions\Templates\EmberModelTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(emberClass.name));
+            
+            #line default
+            #line hidden
+            this.Write(" = DS.Model.extend({\r\n  ");
+            
+            #line 9 "F:\projects\EmberDataWebAPI\EmberWebapiExtensions\Templates\EmberModelTemplate.tt"
+ var cc = 0; 
+            
+            #line default
+            #line hidden
+            this.Write("  ");
+            
+            #line 10 "F:\projects\EmberDataWebAPI\EmberWebapiExtensions\Templates\EmberModelTemplate.tt"
+ foreach(var emberProperty in emberClass.properties) { cc++; 
+            
+            #line default
+            #line hidden
+            this.Write("  ");
+            
+            #line 11 "F:\projects\EmberDataWebAPI\EmberWebapiExtensions\Templates\EmberModelTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(emberProperty.Name));
+            
+            #line default
+            #line hidden
+            this.Write(" : DS.attr(\'");
+            
+            #line 11 "F:\projects\EmberDataWebAPI\EmberWebapiExtensions\Templates\EmberModelTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(emberProperty.PropertyType));
+            
+            #line default
+            #line hidden
+            this.Write("\')");
+            
+            #line 11 "F:\projects\EmberDataWebAPI\EmberWebapiExtensions\Templates\EmberModelTemplate.tt"
+ if(cc < model.Classes.ToArray().Length){  
+            
+            #line default
+            #line hidden
+            this.Write(", \r\n");
+            
+            #line 12 "F:\projects\EmberDataWebAPI\EmberWebapiExtensions\Templates\EmberModelTemplate.tt"
+ } 
+            
+            #line default
+            #line hidden
+            
+            #line 13 "F:\projects\EmberDataWebAPI\EmberWebapiExtensions\Templates\EmberModelTemplate.tt"
+ } 
+            
+            #line default
+            #line hidden
+            this.Write("\r\n});\r\n \r\n");
+            
+            #line 17 "F:\projects\EmberDataWebAPI\EmberWebapiExtensions\Templates\EmberModelTemplate.tt"
+ } 
+            
+            #line default
+            #line hidden
+            this.Write("\r\n\t\r\n}(");
+            
+            #line 20 "F:\projects\EmberDataWebAPI\EmberWebapiExtensions\Templates\EmberModelTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(appNamespace));
+            
+            #line default
+            #line hidden
+            this.Write("));");
             return this.GenerationEnvironment.ToString();
         }
     }

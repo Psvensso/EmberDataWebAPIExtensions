@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace EmberWebapiExtensions.Attributes
 {
-    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
-    public class EmberPrimaryKeyAttribute : Attribute
+    [AttributeUsage(AttributeTargets.Property)]
+    public class BelongsToAttribute : Attribute
     {
-        
+
     }
 }

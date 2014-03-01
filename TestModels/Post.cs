@@ -7,20 +7,18 @@ using System.Threading.Tasks;
 
 namespace TestModels
 {
-    [EmberModel(name="Post", pluralName="Posts")]
+    [EmberModel("Post","Posts")]
     public class Post
     {
-        [EmberPrimaryKey("id")]
-        public int Id { get; set; }
-        public string Name { get; set; }
+        public int id { get; set; }
+        public bool isPosted { get; set; }
+        public DateTime postedAt { get; set; }
+        public string postBody { get; set; }
+
+        [EmberHasMany]
+        [EmberProperty(name="comments")]
+        public List<Comment> Comments { get; set; }
     }
 
-    [EmberModel(name = "Post", pluralName = "Posts")]
-    public class Comment
-    {
-        [EmberPrimaryKey("id")]
-        public int Id { get; set; }
-        public string Name { get; set; }
-
-    }
+    
 }

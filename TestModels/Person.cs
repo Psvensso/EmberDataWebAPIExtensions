@@ -7,12 +7,18 @@ using System.Threading.Tasks;
 
 namespace TestModels
 {
-    [EmberModel(name="Person", pluralName="Persons", primaryKey="Id")]
+    [EmberModel("Person","Persons")]
     public class Person
     {
-
         public int Id { get; set; }
-        [EmberProperty(emberType="string", name="name")]
-        public string Name { get; set; }
+
+        [EmberProperty("firstName", "string")]
+        public string FirstName { get; set; }
+
+        [EmberProperty("lastName", "string")]
+        public string LastName { get; set; }
+
+        [EmberIgnoreAttribute]
+        public string NotInUse { get; set; }
     }
 }

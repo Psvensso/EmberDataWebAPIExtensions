@@ -12,10 +12,18 @@ namespace EmberWebapiExtensions.Attributes
         public string emberType { get; set; }
         public string name { get; set; }
 
-        public EmberPropertyAttribute(string _defaultValue, string _type, string _name) {
-            defaultValue = _defaultValue; name = _name; emberType = _type;
+        public EmberPropertyAttribute(string Name, string EmberType, string DefaultValue)
+        {
+                defaultValue = DefaultValue; name = Name; emberType = EmberType;
         }
-        
+        public EmberPropertyAttribute(string Name, string EmberType)
+        {
+            name = Name; emberType = EmberType;
+        }
+        public EmberPropertyAttribute(string Name)
+        {
+            name = Name;
+        }
         public EmberPropertyAttribute(){}
     }
 }

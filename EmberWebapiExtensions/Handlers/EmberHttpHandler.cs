@@ -9,11 +9,11 @@ namespace EmberWebapiExtensions
         
             private static string _proxyJs;
             private static volatile object _syncRoot = new object();
-            private IModelGenerator _generator;
+            private IScriptGenerator _generator;
 
             public EmberHttpHandler()
             {
-                _generator = new EmberModelGenerator();
+                _generator = new EmberScriptGenerator();
             }
 
             /// <summary>

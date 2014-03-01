@@ -5,7 +5,7 @@ using System.Web;
 
 namespace EmberWebapiExtensions
 {
-    public interface IModelGenerator
+    public interface IScriptGenerator
     {
         /// <summary>
         /// Generates the proxy script.

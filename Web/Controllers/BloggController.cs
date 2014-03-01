@@ -45,7 +45,7 @@ namespace Web.Controllers
         }
     }
 
-    [EmberModel(name = "blogg", pluralName = "bloggs")]
+    [EmberModel("blogg","bloggs")]
     public class Blogg {
         public int id { get; set; }
         public string title { get; set; }
