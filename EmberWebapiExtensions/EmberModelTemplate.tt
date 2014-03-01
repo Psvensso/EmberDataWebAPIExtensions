@@ -4,9 +4,7 @@
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.Collections.Generic" #>
 (function(App) {
-	if (!DS) {
-		throw "Ember data is not defined";
-	}
+	
 
 	
 }(App));

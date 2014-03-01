@@ -28,8 +28,7 @@ namespace EmberWebapiExtensions
         /// </summary>
         public virtual string TransformText()
         {
-            this.Write("(function(App) {\r\n\tif (!DS) {\r\n\t\tthrow \"Ember data is not defined\";\r\n\t}\r\n\r\n\t\r\n}(A" +
-                    "pp));");
+            this.Write("(function(App) {\r\n\t\r\n\r\n\t\r\n}(App));");
             return this.GenerationEnvironment.ToString();
         }
     }
