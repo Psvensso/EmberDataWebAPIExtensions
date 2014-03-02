@@ -132,12 +132,12 @@ namespace EmberWebapiExtensions
             if (attr != null)
             {
                 classProp.Name = attr.name ?? prop.Name;
-                classProp.PropertyType = attr.emberType ?? getEmberPropertyType(prop);
+                classProp.PropertyType = attr.emberType ?? prop.getEmberPropertyType();
             }
             else
             {
                 classProp.Name = prop.Name;
-                classProp.PropertyType = getEmberPropertyType(prop);
+                classProp.PropertyType = prop.getEmberPropertyType();
             }
 
             if (prop.hasAttribute<EmberPrimaryKeyAttribute>())
@@ -151,24 +151,7 @@ namespace EmberWebapiExtensions
                 
             return c;
         }
-        public string getEmberPropertyType(PropertyInfo prop)
-        {
-            var p = prop;
-
-            switch (p.PropertyType.Name)
-            {
-                case "String":
-                    return "string";
-                case "Int32":
-                    return "number";
-                case "Boolean":
-                    return "boolean";
-                case "DateTime":
-                    return "date";
-
-            }
-            return String.Empty;
-        }
+        
         
     }
 }

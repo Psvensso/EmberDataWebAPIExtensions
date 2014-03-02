@@ -70,7 +70,7 @@
     <Compile Include="EmberBootstrapper.cs" />
     <Compile Include="Handlers\EmberHttpHandler.cs" />
     <Compile Include="MediaTypeFormatters\EmberTypeFormatter.cs" />
-    <Compile Include="ModelGenerator\ExtensionMethods.cs" />
+    <Compile Include="ExtensionMethods.cs" />
     <Compile Include="ModelGenerator\IEmberModel.cs" />
     <Compile Include="ModelGenerator\EmberClass.cs" />
     <Compile Include="ModelGenerator\EmberClassProperty.cs" />

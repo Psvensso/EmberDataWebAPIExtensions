@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.Http;
 using System.Diagnostics.CodeAnalysis;
+using System.Net.Http.Formatting;
 
 [assembly: PreApplicationStartMethod(typeof(EmberWebapiExtensions.EmberBootstrapper), "RegisterProxyRoutes")]
 [assembly: PreApplicationStartMethod(typeof(EmberWebapiExtensions.EmberBootstrapper), "AddEmberJsonFormatter")]
@@ -29,12 +30,12 @@ namespace EmberWebapiExtensions
             RouteTable.Routes.Add("embermodels",
 				new Route("embermodels", routeValues, new RouteHandler()));
 		}
-
         public static void AddEmberJsonFormatter() {
             var conf = GlobalConfiguration.Configuration;
-
-
-        
+            conf.Formatters.Clear();
+            conf.Formatters.Add(new EmberTypeFormatter());
+            conf.Formatters.Add(new XmlMediaTypeFormatter());
+            conf.Formatters.Add(new FormUrlEncodedMediaTypeFormatter());
         }
 	}
 }

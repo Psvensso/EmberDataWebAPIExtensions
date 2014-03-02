@@ -31,11 +31,17 @@ namespace EmberWebapiExtensions
         }
         public override bool CanReadType(Type type)
         {
-            return false;
+            if(type.isEmberModel())
+                return true;
+
+            return base.CanReadType(type);
         }
         public override bool CanWriteType(Type type)
         {
-            return hasEmberModelAttribute(type);
+            if (type.isEmberModel())
+                return true;
+
+            return base.CanReadType(type);
         }
         public override Task WriteToStreamAsync(Type type, object value, Stream writeStream, HttpContent content, TransportContext transportContext)
         {
@@ -55,10 +61,6 @@ namespace EmberWebapiExtensions
                 var val = value;
                 var sw = new StreamWriter(writeStream, System.Text.Encoding.UTF8);
 
-                var p = type.GetProperties();
-                var f = type.GetFields();
-                var h = type.CustomAttributes;
-                var allEmberModels = GetTypesWithHelpAttribute(Assembly.GetExecutingAssembly());
                 sw.WriteLine("{}");
                 sw.Flush();
 
@@ -66,20 +68,7 @@ namespace EmberWebapiExtensions
             
             //return base.WriteToStreamAsync(type, innerValue, writeStream, content, transportContext);
         }
-        public bool hasEmberModelAttribute(Type type)
-        {
-            return (type.GetCustomAttributes(typeof(EmberModelAttribute), true).Length > 0);
-        }
-        static IEnumerable<Type> GetTypesWithHelpAttribute(Assembly assembly)
-        {
-            foreach (Type type in assembly.GetTypes())
-            {
-                if (type.GetCustomAttributes(typeof(EmberModelAttribute), true).Length > 0)
-                {
-                    yield return type;
-                }
-            }
-        }
+        
         public bool ShouldEnvelope(Type type)
         {
             if (type == typeof(object))
