@@ -18,7 +18,6 @@ namespace Web.Controllers
                 isPosted = true,
                 postedAt = DateTime.Now,
                 postBody = "This is post nr 1"
-
             },
             new Post{
                 id = 2,
@@ -36,7 +35,12 @@ namespace Web.Controllers
                 id = id,
                 isPosted = true,
                 postedAt = DateTime.Now,
-                postBody = "This is post nr " + id
+                postBody = "This is post nr " + id,
+                Person = new Person{
+                    Id = 1,
+                    FirstName ="Per",
+                    LastName = "Svensson"
+                }
             };
         }
 

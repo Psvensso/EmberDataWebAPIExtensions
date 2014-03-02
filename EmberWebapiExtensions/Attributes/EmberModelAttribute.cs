@@ -10,9 +10,12 @@ namespace EmberWebapiExtensions.Attributes
     {
         public string name { get; set; }
         public string pluralName { get; set; }
-        public EmberModelAttribute(string Name, string PluralName) {
+        public string primaryKey { get; set; }
+        public EmberModelAttribute(string Name, string PluralName, string PrimaryKey)
+        {
             name = Name;
             pluralName = PluralName;
+            primaryKey = PrimaryKey;
         }
     }
 }

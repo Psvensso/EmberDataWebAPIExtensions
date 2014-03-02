@@ -65,7 +65,7 @@ namespace EmberWebapiExtensions
                 }
                 else {
                     var emberAttr = type.GetCustomAttribute<EmberModelAttribute>();
-                    returnObject.Add(emberAttr.name ?? type.Name, value);
+                    returnObject.Add(emberAttr.name ?? type.Name, extractInnerRelations(returnObject, value, type));
                 }
 
                 var x = JsonConvert.SerializeObject(returnObject);
@@ -74,75 +74,42 @@ namespace EmberWebapiExtensions
                 var sr = new StreamWriter(writeStream);
                 sr.WriteLine(x);
                 sr.Flush();
-
             });
         }
-        
-        public bool ShouldEnvelope(Type type)
-        {
-            if (type == typeof(object))
+
+        //ToDo The BelongsTo method has to be pulled out for reuse and the hasmany must be implemented. 
+        //ToDo Also sideloading attribute property must be added.
+        private IDictionary<string, object> extractInnerRelations(IDictionary<string, object> returnObj, object baseObj, Type baseType){
+            Dictionary<string, object> returnClassObject = new Dictionary<string, object>();
+
+            foreach (var prop in baseType.GetProperties())
             {
-                return false;
+                var propAttr = prop.GetCustomAttribute<EmberPropertyAttribute>();
+                var name = propAttr == null ? prop.Name : (propAttr.name ?? prop.Name);
+                                
+                if (prop.hasAttribute<HasManyAttribute>()) {
+                    
+                }
+                else if (prop.hasAttribute<BelongsToAttribute>()) {
+                    
+                    var propValue = prop.GetValue(baseObj);
+                    if (propValue == null) { continue; }
+
+                    var propValueType = propValue.GetType();
+                    var modelAttr = propValueType.GetCustomAttribute<EmberModelAttribute>();
+
+                    if (modelAttr == null) { throw new Exception("Your BelongsTo on " + prop.Name + " in " + baseType.Name + " is not a Ember model. Relations must be between ember models."); }
+                    var primayK = propValueType.GetProperty(modelAttr.primaryKey).GetValue(propValue);
+                    returnClassObject.Add(name, primayK); 
+                }
+                else {
+                    returnClassObject.Add(name, prop.GetValue(baseObj)); 
+                }
             }
 
-            if (type == typeof(IEnumerable))
-            {
-                return false;
-            }
+            return returnClassObject;
 
-            var innerType = type.getInnerType();
-
-            if (innerType == typeof(string))
-            {
-                return false;
-            }
-
-            if (innerType == typeof(DateTime))
-            {
-                return false;
-            }
-
-            if (innerType == typeof(decimal))
-            {
-                return false;
-            }
-
-            if (innerType.IsPrimitive)
-            {
-                return false;
-            }
-
-            if (IsAnonymousType(innerType))
-            {
-                return false;
-            }
-
-            return true;
         }
-        private static bool IsAnonymousType(Type type)
-        {
-            if (type == null)
-            {
-                throw new ArgumentNullException("type");
-            }
 
-            return Attribute.IsDefined(type, typeof(CompilerGeneratedAttribute), false)
-                   && type.IsGenericType && type.Name.Contains("AnonymousType")
-                   && (type.Name.StartsWith("<>") || type.Name.StartsWith("VB$"))
-                   && (type.Attributes & TypeAttributes.NotPublic) == TypeAttributes.NotPublic;
-        }
-        
-        internal class EnvelopeWrite : IEnvelope
-        {
-            public EnvelopeWrite(object value)
-            {
-                Value = value;
-            }
-
-            public object Value { get; set; }
-        }
-        internal interface IEnvelope
-        {
-        }
-    }
+     }
 }

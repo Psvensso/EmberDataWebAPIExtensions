@@ -70,7 +70,7 @@ namespace EmberWebapiExtensions
 
             c.name = String.IsNullOrWhiteSpace(modelAttr.name) ? t.Name : modelAttr.name;
             c.pluralName = String.IsNullOrWhiteSpace(modelAttr.pluralName) ? c.name : modelAttr.pluralName;
-            c.primaryKey = "id";
+            c.primaryKey = modelAttr.primaryKey ?? "id";
             var props = t.GetProperties();
 
             foreach (var prop in props)
@@ -133,6 +133,7 @@ namespace EmberWebapiExtensions
             {
                 classProp.Name = attr.name ?? prop.Name;
                 classProp.PropertyType = attr.emberType ?? prop.getEmberPropertyType();
+                
             }
             else
             {
@@ -140,18 +141,13 @@ namespace EmberWebapiExtensions
                 classProp.PropertyType = prop.getEmberPropertyType();
             }
 
-            if (prop.hasAttribute<EmberPrimaryKeyAttribute>())
-            {
-                c.primaryKey = classProp.Name;
-            }
-
+            
             //Ember dont want us to defined a attribute called id. 
             if (classProp.Name != "id")
                 c.properties.Add(classProp);
                 
             return c;
         }
-        
         
     }
 }

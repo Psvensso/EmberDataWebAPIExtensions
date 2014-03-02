@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace EmberWebapiExtensions.Test.Models
 {
-    [EmberModel("post","posts")]
+    [EmberModel("post","posts", "id")]
     public class Post
     {
         public int id { get; set; }
@@ -15,9 +15,9 @@ namespace EmberWebapiExtensions.Test.Models
         public DateTime postedAt { get; set; }
         public string postBody { get; set; }
 
-        [HasMany]
-        [EmberProperty(name="comments")]
-        public List<Comment> Comments { get; set; }
+        //[HasMany]
+        //[EmberProperty(name="comments")]
+        //public List<Comment> Comments { get; set; }
 
         [BelongsTo]
         [EmberProperty(name = "person")]

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace EmberWebapiExtensions.Test.Models
 {
-    [EmberModel("comment", "comments")]
+    [EmberModel("comment", "comments", "id")]
     public class Comment
     {
         public int id { get; set; }

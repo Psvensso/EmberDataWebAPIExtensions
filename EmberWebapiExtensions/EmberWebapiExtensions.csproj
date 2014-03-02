@@ -64,7 +64,6 @@
     <Compile Include="Attributes\BelongsToAttribute.cs" />
     <Compile Include="Attributes\EmberIgnoreAttribute.cs" />
     <Compile Include="Attributes\EmberModelAttribute.cs" />
-    <Compile Include="Attributes\EmberPrimaryKey.cs" />
     <Compile Include="Attributes\EmberPropertyAttribute.cs" />
     <Compile Include="Attributes\HasManyAttribute.cs" />
     <Compile Include="EmberBootstrapper.cs" />
