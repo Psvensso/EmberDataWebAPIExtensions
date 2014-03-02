@@ -31,7 +31,8 @@ namespace EmberWebapiExtensions
 		}
 
         public static void AddEmberJsonFormatter() {
-            
+            var conf = GlobalConfiguration.Configuration;
+
 
         
         }
