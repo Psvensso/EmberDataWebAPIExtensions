@@ -63,7 +63,7 @@
     <Compile Include="Attributes\EmberPrimaryKey.cs" />
     <Compile Include="Attributes\EmberPropertyAttribute.cs" />
     <Compile Include="Attributes\HasManyAttribute.cs" />
-    <Compile Include="Handlers\EmberBootstrapper.cs" />
+    <Compile Include="EmberBootstrapper.cs" />
     <Compile Include="Handlers\EmberHttpHandler.cs" />
     <Compile Include="MediaTypeFormatters\EmberTypeFormatter.cs" />
     <Compile Include="ModelGenerator\ExtensionMethods.cs" />

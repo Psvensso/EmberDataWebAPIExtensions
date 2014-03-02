@@ -24,23 +24,19 @@ namespace EmberWebapiExtensions
         private readonly ConcurrentDictionary<Type, bool> shouldEnvelopeCache =
             new ConcurrentDictionary<Type, bool>();
 
-
         public EmberTypeFormatter()
         {
             this.SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/json"));
             SerializerSettings.DateFormatHandling = DateFormatHandling.IsoDateFormat;
         }
-
         public override bool CanReadType(Type type)
         {
             return false;
         }
-
         public override bool CanWriteType(Type type)
         {
             return hasEmberModelAttribute(type);
         }
-        
         public override Task WriteToStreamAsync(Type type, object value, Stream writeStream, HttpContent content, TransportContext transportContext)
         {
             return Task.Factory.StartNew(() =>

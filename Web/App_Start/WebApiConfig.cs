@@ -17,7 +17,7 @@ namespace Web
                        // Web API routes
             var appXmlType = config.Formatters.XmlFormatter.SupportedMediaTypes.FirstOrDefault(t => t.MediaType == "application/xml");
             config.Formatters.XmlFormatter.SupportedMediaTypes.Remove(appXmlType);
-    
+            
             config.MapHttpAttributeRoutes();
 
             config.Routes.MapHttpRoute(
