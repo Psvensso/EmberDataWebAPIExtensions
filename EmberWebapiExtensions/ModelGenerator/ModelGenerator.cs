@@ -75,7 +75,7 @@ namespace EmberWebapiExtensions
 
             foreach (var prop in props)
             {
-                if (hasAttribute<EmberIgnoreAttribute>(prop))
+                if (prop.hasAttribute<EmberIgnoreAttribute>())
                     continue;
 
                 var emProp = CreateEmberProperty(prop, c);
@@ -85,7 +85,8 @@ namespace EmberWebapiExtensions
         }
         public EmberClass CreateEmberProperty(PropertyInfo prop, EmberClass c)
         {
-            if(hasAttribute<HasManyAttribute>(prop) || hasAttribute<BelongsToAttribute>(prop)){
+            if (prop.hasAttribute<HasManyAttribute>() || prop.hasAttribute<BelongsToAttribute>())
+            {
                 return createEmberRelationProperty(prop, c);
             }
 
@@ -94,13 +95,13 @@ namespace EmberWebapiExtensions
         public EmberClass createEmberRelationProperty(PropertyInfo prop, EmberClass c)
         {
             var relationProp = new EmberClassRelationProperty();
-            var isBelongsTo =  hasAttribute<BelongsToAttribute>(prop);
+            var isBelongsTo = prop.hasAttribute<BelongsToAttribute>();
 
             relationProp.isBelongsTo = isBelongsTo;
-            relationProp.Name = hasAttribute<EmberPropertyAttribute>(prop) ? prop.GetCustomAttribute<EmberPropertyAttribute>().name : prop.Name;
+            relationProp.Name = prop.hasAttribute<EmberPropertyAttribute>() ? prop.GetCustomAttribute<EmberPropertyAttribute>().name : prop.Name;
 
             if (isBelongsTo) {
-                if (!hasAttribute<EmberModelAttribute>(prop.PropertyType))
+                if (!prop.PropertyType.hasAttribute<EmberModelAttribute>())
                     throw new Exception("You said BelongsTo on " + c.name + "." + prop.Name + ". But thats not a EmberModel.");
 
                 var relPropAttr = prop.PropertyType.GetCustomAttribute<EmberModelAttribute>();
@@ -111,8 +112,8 @@ namespace EmberWebapiExtensions
                 if (relProp.IsGenericType && relProp.GetGenericTypeDefinition() == typeof(List<>))
                 {
                     var baseType = relProp.GetGenericArguments().First();
-                    
-                    if (baseType == null || !hasAttribute<EmberModelAttribute>(baseType))
+
+                    if (baseType == null || !baseType.hasAttribute<EmberModelAttribute>())
                         throw new Exception("You said HasMany on " + c.name + "." + prop.Name + ". But thats not a EmberModel.");
 
                     var baseAttr = baseType.GetCustomAttribute<EmberModelAttribute>();
@@ -139,7 +140,7 @@ namespace EmberWebapiExtensions
                 classProp.PropertyType = getEmberPropertyType(prop);
             }
 
-            if (hasAttribute<EmberPrimaryKeyAttribute>(prop))
+            if (prop.hasAttribute<EmberPrimaryKeyAttribute>())
             {
                 c.primaryKey = classProp.Name;
             }
@@ -168,13 +169,6 @@ namespace EmberWebapiExtensions
             }
             return String.Empty;
         }
-        public bool hasAttribute<T>(Type type)
-        {
-            return (type.GetCustomAttributes(typeof(T), true).Length > 0);
-        }
-        public bool hasAttribute<T>(PropertyInfo type)
-        {
-            return (type.GetCustomAttributes(typeof(T), true).Length > 0);
-        }
+        
     }
 }

@@ -51,7 +51,7 @@ namespace EmberWebapiExtensions.Templates
             this.Write(".");
             
             #line 8 "F:\projects\EmberDataWebAPI\EmberWebapiExtensions\Templates\EmberModelTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(char.ToUpper(emberClass.name[0]) + emberClass.name.Substring(1)));
+            this.Write(this.ToStringHelper.ToStringWithCulture(emberClass.name.uppercaseFirst()));
             
             #line default
             #line hidden

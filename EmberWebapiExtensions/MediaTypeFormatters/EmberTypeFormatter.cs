@@ -13,7 +13,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System.Net.Http.Headers;
 using EmberWebapiExtensions.Attributes;
-namespace Web.MediaTypeFormatters
+namespace EmberWebapiExtensions
 {
     public class EmberTypeFormatter : JsonMediaTypeFormatter
     {
@@ -29,7 +29,6 @@ namespace Web.MediaTypeFormatters
         {
             this.SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/json"));
             SerializerSettings.DateFormatHandling = DateFormatHandling.IsoDateFormat;
-            
         }
 
         public override bool CanReadType(Type type)

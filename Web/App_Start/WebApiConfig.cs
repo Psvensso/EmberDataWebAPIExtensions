@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http.Formatting;
 using System.Web.Http;
-using Web.MediaTypeFormatters;
 
 namespace Web
 {
