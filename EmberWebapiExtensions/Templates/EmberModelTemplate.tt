@@ -1,0 +1,26 @@
+﻿<#@ template language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+(function(<#= appNamespace #>) {
+<# foreach(var emberClass in model.Classes) { #>
+<#= appNamespace #>.<#= char.ToUpper(emberClass.name[0]) + emberClass.name.Substring(1) #> = DS.Model.extend({
+  <# var cc = 0; #>
+  <# foreach(var emberProperty in emberClass.properties) { cc++; #>
+  <#= emberProperty.Name #> : DS.attr('<#= emberProperty.PropertyType #>')<# if(cc < emberClass.properties.Count || emberClass.relationproperties.Count > 0){  #>, 
+<# } #>
+<# } #>
+  <# var rc = 0; #>
+  <# foreach(var emberRelProperty in emberClass.relationproperties) { rc++; #>
+  <#= emberRelProperty.Name #> : DS.<# if(emberRelProperty.isBelongsTo){ #>belongsTo<#} else { #>hasMany<# } #>('<#= emberRelProperty.relationTypeName #>') <# if(rc < emberClass.relationproperties.Count){  #>, 
+
+<# } #>
+<# } #>
+
+});
+ 
+<# } #>
+
+	
+}(<#= appNamespace #>));
