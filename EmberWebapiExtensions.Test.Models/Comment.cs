@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TestModels
+namespace EmberWebapiExtensions.Test.Models
 {
-    [EmberModel("Comment", "Comments")]
+    [EmberModel("comment", "comments")]
     public class Comment
     {
         public int id { get; set; }

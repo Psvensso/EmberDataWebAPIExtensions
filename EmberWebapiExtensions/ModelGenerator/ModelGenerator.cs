@@ -9,17 +9,22 @@ using System.Web.Configuration;
 
 namespace EmberWebapiExtensions
 {
-    public sealed class ModelGenerator
+    public class ModelGenerator
     {
+        private static Assembly modelAssembly;
+        #region Ctor
         private static volatile ModelGenerator instance;
         private static volatile ModelExtractor modelExtractor;
 
         private static object syncRoot = new Object();
-
         private ModelGenerator() {
             modelExtractor = ModelExtractor.Instance;
         }
-
+        public ModelGenerator(Assembly ModelAssembly)
+        {
+            modelAssembly = ModelAssembly;
+            modelExtractor = ModelExtractor.Instance;
+        }
         public static ModelGenerator Instance
         {
             get 
@@ -36,65 +41,117 @@ namespace EmberWebapiExtensions
                 return instance;
             }
         }
+        #endregion
 
         public EmberModel GenerateModel() {
             EmberModel model = CreateModelFromTypeTree(GetClassTypes());
             return model;
         }
-
-        static IEnumerable<Type> GetClassTypes() {
+        public IEnumerable<Type> GetClassTypes()
+        {
             var assemblyNameSetting = WebConfigurationManager.AppSettings["EmberModel:ModelAssemblyName"];
-            if(assemblyNameSetting == null){
+            if (assemblyNameSetting == null)
+            {
                 return modelExtractor.GetTypesWithEmberModelAttribute();
             }
             return modelExtractor.GetTypesWithEmberModelAttribute(assemblyNameSetting.ToString());
         }
-        private EmberModel CreateModelFromTypeTree(IEnumerable<Type> types) {
+        public EmberModel CreateModelFromTypeTree(IEnumerable<Type> types)
+        {
             var model = new EmberModel();
             foreach(var t in types){
-                var modelAttr = t.GetCustomAttribute<EmberModelAttribute>();
-                var c = new EmberClass();
-                
-                c.name = String.IsNullOrWhiteSpace(modelAttr.name) ? t.Name : modelAttr.name;
-                c.pluralName = String.IsNullOrWhiteSpace(modelAttr.pluralName) ? c.name : modelAttr.pluralName;
-                c.primaryKey = "id";
-                var props = t.GetProperties();
-
-                foreach (var prop in props)
-                {
-                    if (hasAttribute<EmberIgnoreAttribute>(prop))
-                        continue;
-                    
-                    var classProp = new EmberClassProperty();
-                    var attr = prop.GetCustomAttribute<EmberPropertyAttribute>();
-                    if (attr != null)
-                    {
-                        classProp.Name = attr.name ?? prop.Name;
-                        classProp.PropertyType = attr.emberType ?? getEmberPropertyType(prop);
-                    }
-                    else {
-                        classProp.Name = prop.Name;
-                        classProp.PropertyType = getEmberPropertyType(prop);
-                    }
-                    if (hasAttribute<EmberPrimaryKeyAttribute>(prop))
-                    {
-                        c.primaryKey = classProp.Name;
-                    }
-
-                    //Ember dont want us to defined a attribute called id. 
-                    if (classProp.Name == "id") 
-                        continue;                
-                    
-                    c.properties.Add(classProp);
-                }
-
-
-                model.Classes.Add(c);
+                model.Classes.Add(CreateEmberClassFromType(t));
             }
             return model;
         }
+        public EmberClass CreateEmberClassFromType(Type t) {
+            var modelAttr = t.GetCustomAttribute<EmberModelAttribute>();
+            var c = new EmberClass();
 
-        private string getEmberPropertyType(PropertyInfo prop) {
+            c.name = String.IsNullOrWhiteSpace(modelAttr.name) ? t.Name : modelAttr.name;
+            c.pluralName = String.IsNullOrWhiteSpace(modelAttr.pluralName) ? c.name : modelAttr.pluralName;
+            c.primaryKey = "id";
+            var props = t.GetProperties();
+
+            foreach (var prop in props)
+            {
+                if (hasAttribute<EmberIgnoreAttribute>(prop))
+                    continue;
+
+                var emProp = CreateEmberProperty(prop, c);
+            }
+
+            return c;
+        }
+        public EmberClass CreateEmberProperty(PropertyInfo prop, EmberClass c)
+        {
+            if(hasAttribute<HasManyAttribute>(prop) || hasAttribute<BelongsToAttribute>(prop)){
+                return createEmberRelationProperty(prop, c);
+            }
+
+            return createEmberValueProperty(prop, c);
+        }
+        public EmberClass createEmberRelationProperty(PropertyInfo prop, EmberClass c)
+        {
+            var relationProp = new EmberClassRelationProperty();
+            var isBelongsTo =  hasAttribute<BelongsToAttribute>(prop);
+
+            relationProp.isBelongsTo = isBelongsTo;
+            relationProp.Name = hasAttribute<EmberPropertyAttribute>(prop) ? prop.GetCustomAttribute<EmberPropertyAttribute>().name : prop.Name;
+
+            if (isBelongsTo) {
+                if (!hasAttribute<EmberModelAttribute>(prop.PropertyType))
+                    throw new Exception("You said BelongsTo on " + c.name + "." + prop.Name + ". But thats not a EmberModel.");
+
+                var relPropAttr = prop.PropertyType.GetCustomAttribute<EmberModelAttribute>();
+                relationProp.relationTypeName = relPropAttr.name;
+            }
+            else {
+                var relProp = prop.PropertyType;
+                if (relProp.IsGenericType && relProp.GetGenericTypeDefinition() == typeof(List<>))
+                {
+                    var baseType = relProp.GetGenericArguments().First();
+                    
+                    if (baseType == null || !hasAttribute<EmberModelAttribute>(baseType))
+                        throw new Exception("You said HasMany on " + c.name + "." + prop.Name + ". But thats not a EmberModel.");
+
+                    var baseAttr = baseType.GetCustomAttribute<EmberModelAttribute>();
+                    relationProp.relationTypeName = baseAttr.pluralName ?? baseAttr.name;
+                }
+            }
+
+            c.relationproperties.Add(relationProp);
+
+            return c;
+        }
+        public EmberClass createEmberValueProperty(PropertyInfo prop, EmberClass c)
+        {
+            var classProp = new EmberClassProperty();
+            var attr = prop.GetCustomAttribute<EmberPropertyAttribute>();
+            if (attr != null)
+            {
+                classProp.Name = attr.name ?? prop.Name;
+                classProp.PropertyType = attr.emberType ?? getEmberPropertyType(prop);
+            }
+            else
+            {
+                classProp.Name = prop.Name;
+                classProp.PropertyType = getEmberPropertyType(prop);
+            }
+
+            if (hasAttribute<EmberPrimaryKeyAttribute>(prop))
+            {
+                c.primaryKey = classProp.Name;
+            }
+
+            //Ember dont want us to defined a attribute called id. 
+            if (classProp.Name != "id")
+                c.properties.Add(classProp);
+                
+            return c;
+        }
+        public string getEmberPropertyType(PropertyInfo prop)
+        {
             var p = prop;
 
             switch (p.PropertyType.Name)
@@ -111,13 +168,13 @@ namespace EmberWebapiExtensions
             }
             return String.Empty;
         }
-        private bool hasAttribute<T>(Type type) {
-            return (type.GetCustomAttributes(typeof(T), true).Length > 0);
-        }
-        private bool hasAttribute<T>(PropertyInfo type)
+        public bool hasAttribute<T>(Type type)
         {
             return (type.GetCustomAttributes(typeof(T), true).Length > 0);
         }
-
+        public bool hasAttribute<T>(PropertyInfo type)
+        {
+            return (type.GetCustomAttributes(typeof(T), true).Length > 0);
+        }
     }
 }

@@ -86,7 +86,7 @@ namespace EmberWebapiExtensions.Templates
             this.Write("\')");
             
             #line 11 "F:\projects\EmberDataWebAPI\EmberWebapiExtensions\Templates\EmberModelTemplate.tt"
- if(cc < model.Classes.ToArray().Length){  
+ if(cc < emberClass.properties.Count || emberClass.relationproperties.Count > 0){  
             
             #line default
             #line hidden
@@ -103,16 +103,85 @@ namespace EmberWebapiExtensions.Templates
             
             #line default
             #line hidden
+            this.Write("  ");
+            
+            #line 14 "F:\projects\EmberDataWebAPI\EmberWebapiExtensions\Templates\EmberModelTemplate.tt"
+ var rc = 0; 
+            
+            #line default
+            #line hidden
+            this.Write("  ");
+            
+            #line 15 "F:\projects\EmberDataWebAPI\EmberWebapiExtensions\Templates\EmberModelTemplate.tt"
+ foreach(var emberRelProperty in emberClass.relationproperties) { rc++; 
+            
+            #line default
+            #line hidden
+            this.Write("  ");
+            
+            #line 16 "F:\projects\EmberDataWebAPI\EmberWebapiExtensions\Templates\EmberModelTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(emberRelProperty.Name));
+            
+            #line default
+            #line hidden
+            this.Write(" : DS.");
+            
+            #line 16 "F:\projects\EmberDataWebAPI\EmberWebapiExtensions\Templates\EmberModelTemplate.tt"
+ if(emberRelProperty.isBelongsTo){ 
+            
+            #line default
+            #line hidden
+            this.Write("belongsTo");
+            
+            #line 16 "F:\projects\EmberDataWebAPI\EmberWebapiExtensions\Templates\EmberModelTemplate.tt"
+} else { 
+            
+            #line default
+            #line hidden
+            this.Write("hasMany");
+            
+            #line 16 "F:\projects\EmberDataWebAPI\EmberWebapiExtensions\Templates\EmberModelTemplate.tt"
+ } 
+            
+            #line default
+            #line hidden
+            this.Write("(\'");
+            
+            #line 16 "F:\projects\EmberDataWebAPI\EmberWebapiExtensions\Templates\EmberModelTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(emberRelProperty.relationTypeName));
+            
+            #line default
+            #line hidden
+            this.Write("\') ");
+            
+            #line 16 "F:\projects\EmberDataWebAPI\EmberWebapiExtensions\Templates\EmberModelTemplate.tt"
+ if(rc < emberClass.relationproperties.Count){  
+            
+            #line default
+            #line hidden
+            this.Write(", \r\n\r\n");
+            
+            #line 18 "F:\projects\EmberDataWebAPI\EmberWebapiExtensions\Templates\EmberModelTemplate.tt"
+ } 
+            
+            #line default
+            #line hidden
+            
+            #line 19 "F:\projects\EmberDataWebAPI\EmberWebapiExtensions\Templates\EmberModelTemplate.tt"
+ } 
+            
+            #line default
+            #line hidden
             this.Write("\r\n});\r\n \r\n");
             
-            #line 17 "F:\projects\EmberDataWebAPI\EmberWebapiExtensions\Templates\EmberModelTemplate.tt"
+            #line 23 "F:\projects\EmberDataWebAPI\EmberWebapiExtensions\Templates\EmberModelTemplate.tt"
  } 
             
             #line default
             #line hidden
             this.Write("\r\n\t\r\n}(");
             
-            #line 20 "F:\projects\EmberDataWebAPI\EmberWebapiExtensions\Templates\EmberModelTemplate.tt"
+            #line 26 "F:\projects\EmberDataWebAPI\EmberWebapiExtensions\Templates\EmberModelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(appNamespace));
             
             #line default

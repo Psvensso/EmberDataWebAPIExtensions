@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("TestModels")]
+[assembly: AssemblyTitle("EmberWebapiExtensions.Test.Models")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("TestModels")]
+[assembly: AssemblyProduct("EmberWebapiExtensions.Test.Models")]
 [assembly: AssemblyCopyright("Copyright ©  2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("65cf0d10-b604-4254-a5bc-4eae565dfa70")]
+[assembly: Guid("b0916580-e533-47c6-a75c-3fc9a6eb46c7")]
 
 // Version information for an assembly consists of the following four values:
 //

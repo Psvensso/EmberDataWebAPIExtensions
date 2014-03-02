@@ -253,13 +253,13 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\EmberWebapiExtensions.Test.Models\EmberWebapiExtensions.Test.Models.csproj">
+      <Project>{3e79588d-2fcf-4d08-8b55-9bfa22a0a89d}</Project>
+      <Name>EmberWebapiExtensions.Test.Models</Name>
+    </ProjectReference>
     <ProjectReference Include="..\EmberWebapiExtensions\EmberWebapiExtensions.csproj">
       <Project>{595bbd34-9e09-4e07-bd33-52192853ba22}</Project>
       <Name>EmberWebapiExtensions</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TestModels\TestModels.csproj">
-      <Project>{1b1c25f0-4946-4aa3-af5b-8e92982354ee}</Project>
-      <Name>TestModels</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

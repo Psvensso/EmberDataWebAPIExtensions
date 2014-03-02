@@ -52,7 +52,7 @@ namespace Web.Controllers
         public string body { get; set; }
         public DateTime postedAt { get; set; }
         public string author { get; set; }
-        [EmberHasMany]
+        [HasMany]
         public virtual List<Comment> Comments { get; set; }
     }
 

@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TestModels
+namespace EmberWebapiExtensions.Test.Models
 {
-    [EmberModel("Post","Posts")]
+    [EmberModel("post","posts")]
     public class Post
     {
         public int id { get; set; }
@@ -15,9 +15,14 @@ namespace TestModels
         public DateTime postedAt { get; set; }
         public string postBody { get; set; }
 
-        [EmberHasMany]
+        [HasMany]
         [EmberProperty(name="comments")]
         public List<Comment> Comments { get; set; }
+
+        [BelongsTo]
+        [EmberProperty(name = "person")]
+        public Person Person { get; set; }
+
     }
 
     

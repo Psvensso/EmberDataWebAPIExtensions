@@ -43,6 +43,11 @@ namespace EmberWebapiExtensions
             return FindTypes(assembly);
         }
 
+        /// <summary>
+        /// Loads upp and assembly based on a name and finds types within it.
+        /// </summary>
+        /// <param name="assemblyName"></param>
+        /// <returns></returns>
         public IEnumerable<Type> GetTypesWithEmberModelAttribute(string assemblyName)
         {
             return FindTypes(Assembly.Load(assemblyName));

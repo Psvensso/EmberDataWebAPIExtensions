@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace EmberWebapiExtensions
 {
-    public class EmberClassProperty
+    public class EmberClassRelationProperty
     {
         public string Name { get; set; }
-        public string PropertyType { get; set; }
+        public string relationTypeName { get; set; }
+        public bool isBelongsTo { get; set; }
     }
 }

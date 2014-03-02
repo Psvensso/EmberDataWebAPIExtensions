@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TestModels
+namespace EmberWebapiExtensions.Test.Models
 {
-    [EmberModel("Person","Persons")]
+    [EmberModel("person","persons")]
     public class Person
     {
         public int Id { get; set; }

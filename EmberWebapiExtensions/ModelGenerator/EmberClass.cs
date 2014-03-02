@@ -12,9 +12,11 @@ namespace EmberWebapiExtensions
         public string name { get; set; }
         public string pluralName { get; set; }
         public List<EmberClassProperty> properties { get; set; }
+        public List<EmberClassRelationProperty> relationproperties { get; set; }
 
         public EmberClass() {
             properties = new List<EmberClassProperty>();
+            relationproperties = new List<EmberClassRelationProperty>();
         }
     }
 }

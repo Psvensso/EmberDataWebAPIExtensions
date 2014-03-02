@@ -6,8 +6,9 @@ using System.Web;
 namespace EmberWebapiExtensions.Attributes
 {
     [AttributeUsage(AttributeTargets.Property)]
-    public class EmberHasManyAttribute : Attribute
+    public class HasManyAttribute : Attribute
     {
-
+        public string embedded { get; set; }
+        public string inverse { get; set; }
     }
 }
