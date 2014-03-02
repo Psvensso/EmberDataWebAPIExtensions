@@ -13,6 +13,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System.Net.Http.Headers;
 using EmberWebapiExtensions.Attributes;
+using System.Dynamic;
 namespace EmberWebapiExtensions
 {
     public class EmberTypeFormatter : JsonMediaTypeFormatter
@@ -45,28 +46,36 @@ namespace EmberWebapiExtensions
         }
         public override Task WriteToStreamAsync(Type type, object value, Stream writeStream, HttpContent content, TransportContext transportContext)
         {
+            if(type.isCollection()){
+                    if(type.getInnerType().isEmberModel() == false){
+                        return base.WriteToStreamAsync(type, value, writeStream, content, transportContext);
+                    }
+            } else if(type.isEmberModel() == false){
+                return base.WriteToStreamAsync(type, value, writeStream, content, transportContext);
+            }
+
             return Task.Factory.StartNew(() =>
             {
-                var serializedType = value != null
-                ? value.GetType()
-                : type;
+                Dictionary<string, object> returnObject = new Dictionary<string, object>();
 
-                var shouldEnvelope = shouldEnvelopeCache.GetOrAdd(serializedType, ShouldEnvelope);
-                var isArr = serializedType.IsArray;
-                var members = type.GetMembers();
-                var innerValue = shouldEnvelope
-                ? new EnvelopeWrite(value)
-                : value;
+                if (type.isCollection())
+                {
+                    var emberAttr = type.getInnerType().GetCustomAttribute<EmberModelAttribute>();
+                    returnObject.Add(emberAttr.pluralName ?? emberAttr.name, value);
+                }
+                else {
+                    var emberAttr = type.GetCustomAttribute<EmberModelAttribute>();
+                    returnObject.Add(emberAttr.name ?? type.Name, value);
+                }
 
-                var val = value;
-                var sw = new StreamWriter(writeStream, System.Text.Encoding.UTF8);
-
-                sw.WriteLine("{}");
-                sw.Flush();
+                var x = JsonConvert.SerializeObject(returnObject);
+                var y = 0;
+                y++;
+                var sr = new StreamWriter(writeStream);
+                sr.WriteLine(x);
+                sr.Flush();
 
             });
-            
-            //return base.WriteToStreamAsync(type, innerValue, writeStream, content, transportContext);
         }
         
         public bool ShouldEnvelope(Type type)
@@ -81,7 +90,7 @@ namespace EmberWebapiExtensions
                 return false;
             }
 
-            var innerType = GetInnerType(type);
+            var innerType = type.getInnerType();
 
             if (innerType == typeof(string))
             {
@@ -122,27 +131,7 @@ namespace EmberWebapiExtensions
                    && (type.Name.StartsWith("<>") || type.Name.StartsWith("VB$"))
                    && (type.Attributes & TypeAttributes.NotPublic) == TypeAttributes.NotPublic;
         }
-        private Type GetInnerType(Type type)
-        {
-            if (type.IsArray)
-            {
-                return type.GetElementType();
-            }
-
-            var underlying = Nullable.GetUnderlyingType(type);
-            if (underlying != null)
-            {
-                return underlying;
-            }
-
-            if (type.IsGenericType
-                && typeof(IEnumerable<>).IsAssignableFrom(type.GetGenericTypeDefinition()))
-            {
-                return type.GetGenericArguments()[0];
-            }
-
-            return type;
-        }
+        
         internal class EnvelopeWrite : IEnvelope
         {
             public EnvelopeWrite(object value)

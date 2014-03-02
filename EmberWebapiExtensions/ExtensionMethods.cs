@@ -1,5 +1,6 @@
 ﻿using EmberWebapiExtensions.Attributes;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -18,9 +19,32 @@ namespace EmberWebapiExtensions
         {
             return t.hasAttribute<EmberModelAttribute>();
         }
+        public static Type getInnerType(this Type type)
+        {
+            if (type.IsArray)
+            {
+                return type.GetElementType();
+            }
+
+            var underlying = Nullable.GetUnderlyingType(type);
+            if (underlying != null)
+            {
+                return underlying;
+            }
+
+            if (type.IsGenericType
+                && typeof(IEnumerable<>).IsAssignableFrom(type.GetGenericTypeDefinition()))
+            {
+                return type.GetGenericArguments()[0];
+            }
+
+            return type;
+        }
+        public static bool isCollection(this Type type) {
+            return typeof(IEnumerable).IsAssignableFrom(type);
+        }
         #endregion
         #region PropertyInfo
-
         public static bool hasAttribute<T>(this PropertyInfo type)
         {
             return (type.GetCustomAttributes(typeof(T), true).Length > 0);
